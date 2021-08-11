@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_agenda_de_contatos/models/contact.dart';
+import 'package:projeto_agenda_de_contatos/provider/list_of_contacts.dart';
+import 'package:projeto_agenda_de_contatos/screnns/details/details.dart';
 import 'package:projeto_agenda_de_contatos/style.dart';
 
 class Home extends StatefulWidget {
@@ -18,7 +21,7 @@ class _HomeState extends State<Home> {
       ),
       body: ListView.separated(
         itemBuilder: builder,
-        itemCount: 9,
+        itemCount: listOfContacts.length,
         separatorBuilder: (_, index) {
           return Divider();
         },
@@ -27,29 +30,52 @@ class _HomeState extends State<Home> {
   }
 
   Widget builder(BuildContext _, int index) {
+    Contact _contact = listOfContacts.elementAt(index);
     return ListTile(
       leading: IconButton(
-        icon: Icon(
-          Icons.star,
-          color: blueTheme,
-        ),
-        onPressed: () {},
+        icon: (_contact.isFavorite)
+            ? Icon(
+                Icons.star,
+                color: blueTheme,
+              )
+            : Icon(
+                Icons.star_outline,
+                color: blueTheme,
+              ),
+        onPressed: () {
+          setState(() {
+            _contact.isFavorite = !_contact.isFavorite;
+          });
+        },
       ),
       trailing: IconButton(
         icon: Icon(
           Icons.chevron_right,
           color: grayTheme,
         ),
-        onPressed: () {},
+        //ir para próxima pag
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext _) {
+                return Details(_contact);
+              },
+            ),
+          );
+        },
       ),
       title: Row(
         children: [
-          ClipOval(
-            child: Image.asset(
-              "assets/images/Nicole.jpg",
-              width: 40,
-              height: 40,
-              fit: BoxFit.cover,
+          //widget animaçao "Hero"
+          Hero(
+            tag: _contact.name,
+            child: ClipOval(
+              child: Image.asset(
+                _contact.photo,
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           SizedBox(
@@ -59,7 +85,7 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Nicole",
+                _contact.name,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -67,7 +93,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Text(
-                "+55 51 11111-1111",
+                _contact.phone,
                 style: TextStyle(
                   fontSize: 10,
                   color: grayTheme,

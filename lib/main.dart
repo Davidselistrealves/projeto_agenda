@@ -16,6 +16,9 @@ void main() {
           thickness: 1,
         ),
         primarySwatch: blueTheme,
+        iconTheme: IconThemeData(
+          color: blueTheme,
+        ),
       ),
     ),
   );
