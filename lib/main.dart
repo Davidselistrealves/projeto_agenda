@@ -18,6 +18,7 @@ void main() {
         primarySwatch: blueTheme,
         iconTheme: IconThemeData(
           color: blueTheme,
+          size: 20,
         ),
       ),
     ),
